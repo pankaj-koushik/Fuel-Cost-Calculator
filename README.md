@@ -22,3 +22,6 @@ Steps to Run the Application
 
    Run below command to verify the data in kafka topic                
    kafka-console-consumer --list --bootstrap-server localhost:19092 --topic business_event --from-beginning
+   
+   
+   Event Producer Server URL-----> **http://localhost:9090**
