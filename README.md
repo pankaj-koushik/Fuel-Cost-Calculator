@@ -20,5 +20,5 @@ Steps to Run the Application
    Run below command to see list of kafka topics  
    kafka-topics --list --bootstrap-server localhost:19092
 
-   Run below command to verify the data in kafka topics                
+   Run below command to verify the data in kafka topic                
    kafka-console-consumer --list --bootstrap-server localhost:19092 --topic business_event --from-beginning
