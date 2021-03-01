@@ -1,0 +1,76 @@
+plugins {
+
+    id 'java'
+}
+
+
+subprojects{
+
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'maven'
+    apply plugin: 'eclipse'
+    apply plugin: 'project-report'
+
+    //project details
+    group="${apiGrp}"
+    version="${apiVer}"
+
+    // jdk compatibility
+    sourceCompatibility = "${jdkVersion}"
+    targetCompatibility = "${jdkVersion}"
+
+
+    // In this section you declare where to find the dependencies of your project
+    repositories {
+        mavenLocal()
+       mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    buildscript {
+        repositories {
+            mavenLocal()
+            mavenCentral()
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+        }
+
+        dependencies {
+            classpath("gradle.plugin.com.palantir.gradle.docker:gradle-docker:${gradleDockerVer}")
+        }
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier "sources"
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
+    // test coverage reporter
+    jacoco {
+        toolVersion = "${jacocoVersion}"
+        reportsDir = file("$buildDir/customJacocoReportDir")
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html.destination file("${buildDir}/jacocoHtml")
+        }
+    }
+
+
+
+
+}
+
+
+

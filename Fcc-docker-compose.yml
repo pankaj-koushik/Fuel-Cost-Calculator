@@ -1,0 +1,154 @@
+version: '2.3'
+services:
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper-1
+    ports:
+      - "12181:12181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 12181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+
+  zookeeper-2:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper-2
+    ports:
+      - "22181:22181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 2
+      ZOOKEEPER_CLIENT_PORT: 22181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+
+  zookeeper-3:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper-3
+    ports:
+      - "32181:32181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 3
+      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+
+  kafka-1:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka-1
+    ports:
+      - "19092:19092"
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:19092
+    volumes:
+      - kafka1-data:/var/lib/kafka/data
+      
+  kafka-2:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka-2
+    ports:
+      - "29092:29092"
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:29092
+    volumes:
+      - kafka2-data:/var/lib/kafka/data
+      
+  kafka-3:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka-3
+    ports:
+      - "39092:39092"
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:39092
+    volumes:
+      - kafka3-data:/var/lib/kafka/data
+      
+  mongodb:
+    image: mongo:latest
+    hostname: mongodb
+    ports:
+     - 27017:27017
+    environment:
+     - MONGO_INITDB_ROOT_USERNAME=debezium
+     - MONGO_INITDB_ROOT_PASSWORD=dbz
+    volumes:
+     - mongodb-data:/data/db
+     
+  fpm:
+    image: fpm-server:1.0.0-SNAPSHOT
+    hostname: fpm
+    ports:
+     - 9094:9092
+    environment:
+     - ACTIVE_PROFILE=deploy
+     - MONGODB_USER=debezium
+     - MONGODB_PASSWORD=dbz
+     - MONGODB_HOST=mongodb
+     - DATABASE_NAME=mercedes
+     
+  event-consumer:
+    image: event-consumer:1.0.0-SNAPSHOT
+    hostname: event-consumer
+    ports:
+     - 9091:9091
+    depends_on:
+     - fpm
+    environment:
+     - ACTIVE_PROFILE=deploy
+     - MONGODB_USER=debezium
+     - MONGODB_PASSWORD=dbz
+     - MONGODB_HOST=mongodb
+     - DATABASE_NAME=mercedes
+     - FPM_SERVER_URL=http://fpm:9092/fuelprice
+     - KAFKA_SERVERS=kafka-1:19092
+     - EVENT_TOPIC=business_event
+     - GROUP_ID=fuel-consumer
+     
+  event-producer:
+    image: event-producer:1.0.0-SNAPSHOT
+    hostname: event-producer
+    ports:
+     - 9090:9090
+    depends_on:
+     - fpm
+    environment:
+     - ACTIVE_PROFILE=deploy
+     - MONGODB_USER=debezium
+     - MONGODB_PASSWORD=dbz
+     - MONGODB_HOST=mongodb
+     - DATABASE_NAME=mercedes
+     - FPM_SERVER_URL=http://fpm:9092/cities
+     - KAFKA_SERVERS=kafka-1:19092
+     - EVENT_TOPIC=business_event
+     - USERNAME=admin
+     - PASSWORD=P@55w0rd
+     
+volumes:
+   mongodb-data:
+   kafka1-data:
+   kafka2-data:
+   kafka3-data:

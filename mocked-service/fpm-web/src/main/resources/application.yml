@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: ${ACTIVE_PROFILE:deploy}
+
+server:
+  port: 9092
+
+---
+spring:
+  profiles: home
+  data:
+    mongodb:
+      uri: mongodb://debezium:dbz@mongodb:27017/mercedes?authSource=admin
+---
+spring:
+  profiles: deploy
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOST}/${DATABASE_NAME}?authSource=admin
+---
+
+
+
+

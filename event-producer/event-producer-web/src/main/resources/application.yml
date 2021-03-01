@@ -1,0 +1,38 @@
+spring:
+  profiles:
+    active: ${ACTIVE_PROFILE:deploy}
+
+server:
+  port: 9090
+
+---
+spring:
+  profiles: home
+  data:
+    mongodb:
+      uri: mongodb://debezium:dbz@mongodb:27017/mercedes?authSource=admin
+app:
+  mocked-server-url: ${FPM_SERVER_URL:http://localhost:9092/cities}
+  username: ${USERNAME:admin}
+  password: ${PASSWORD:P@55w0rd}
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS:kafka-1:19092}
+    topic: ${EVENT_TOPIC:business_event}
+
+---
+spring:
+  profiles: deploy
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOST}/${DATABASE_NAME}?authSource=admin
+app:
+  mocked-server-url: ${FPM_SERVER_URL}
+  username: ${USERNAME}
+  password: ${PASSWORD}
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS}
+    topic: ${EVENT_TOPIC}
+
+
+
+

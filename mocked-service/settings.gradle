@@ -1,0 +1,4 @@
+rootProject.name = 'service'
+include 'fpm-ety'
+include 'fpm-web'
+

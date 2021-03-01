@@ -1,0 +1,37 @@
+spring:
+  profiles:
+    active: ${ACTIVE_PROFILE}
+
+server:
+  port: 9091
+
+---
+spring:
+  profiles: home
+  data:
+    mongodb:
+      uri: mongodb://debezium:dbz@mongodb:27017/mercedes?authSource=admin
+app:
+  mocked-server-url: ${FPM_SERVER_URL:http://localhost:9092/fuelprice}
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS:kafka-1:19092}
+    topic: ${EVENT_TOPIC:business_event}
+    group-id: ${GROUP_ID:fuel-consumer}
+
+---
+spring:
+  profiles: deploy
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOST}/${DATABASE_NAME}?authSource=admin
+app:
+  mocked-server-url: ${FPM_SERVER_URL}
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS}
+    topic: ${EVENT_TOPIC}
+    group-id: ${GROUP_ID}
+---
+
+
+
+

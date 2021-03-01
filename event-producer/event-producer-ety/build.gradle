@@ -1,0 +1,12 @@
+
+
+dependencies {
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+
+}
+
+jar {
+    enabled = true
+}

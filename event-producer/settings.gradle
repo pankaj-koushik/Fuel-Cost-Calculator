@@ -1,0 +1,4 @@
+rootProject.name = 'ep'
+include 'event-producer-web'
+include 'event-producer-ety'
+
