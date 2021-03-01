@@ -6,7 +6,7 @@ Steps to Run the Application
 
 2. Go to mocked-service directory and run command **gradle clean build docker** to build docker image.
 
-3. Go to event-producer folder and then change directory to fpm-ety and then run command **gradle clean install**.
+3. Go to event-producer folder and then change directory to event-producer-ety and then run command **gradle clean install**.
 
 4. Go to event-producer directory and run command  **gradle clean build docker** to build docker image.
 
