@@ -2,17 +2,17 @@
 
 Steps to Run the Application
 
-1. Go to mocked-service folder and then change directory to fpm-ety and then run command * * gradle clean install * *.
+1. Go to mocked-service folder and then change directory to fpm-ety and then run command ** gradle clean install **.
 
-2. Go to mocked-service directory and run command * * gradle clean build docker * * to build docker image.
+2. Go to mocked-service directory and run command ** gradle clean build docker ** to build docker image.
 
-3. Go to event-producer folder and then change directory to fpm-ety and then run command * * gradle clean install * *.
+3. Go to event-producer folder and then change directory to fpm-ety and then run command ** gradle clean install **.
 
-4. Go to event-producer directory and run command  * * gradle clean build docker * * to build docker image.
+4. Go to event-producer directory and run command  ** gradle clean build docker ** to build docker image.
 
-5. Go to fuel-cost-calculator and run command * * gradle clean build docker * * to build docker image.
+5. Go to fuel-cost-calculator and run command ** gradle clean build docker ** to build docker image.
 
-6. There is a docker-compose file in the folder run command * * docker-compose -f Fcc-docker-compose.yml up -d * *.
+6. There is a docker-compose file in the folder run command ** docker-compose -f Fcc-docker-compose.yml up -d **.
 
 7. Open any mongo-client and take username and password from compose file to verify data in mongodb.
 
