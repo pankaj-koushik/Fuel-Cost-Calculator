@@ -17,7 +17,7 @@ Steps to Run the Application
 7. Open any mongo-client and take username and password from compose file to verify data in mongodb.
 
 8. run command docker exec -it kafka_1_container(kakfa-1 container name) bash
-   Run below command to see list of kafka topics
+   Run below command to see list of kafka topics  
    kafka-topics --list --bootstrap-server localhost:19092
 
    Run below command to verify the data in kafka topics
