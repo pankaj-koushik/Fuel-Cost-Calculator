@@ -32,7 +32,7 @@ public abstract class AbstractEvent {
 
     public AbstractEvent(String eventType, String source) {
         /**
-         * @TODO-> validations
+         * 
          */
         this.timestamp = new Date();
         this.eventType = eventType;
